@@ -1,4 +1,8 @@
-﻿using System;
+﻿// COIS 3320 A1: Program
+// Colin A. Marshall(0533528) and Brandon Root(SID)
+// The main program that performs the tests, using the algorithms defined in SchedulingAlgorithms
+
+using System;
 using System.Collections.Generic;
 
 
@@ -18,7 +22,7 @@ namespace Scheduler
 
             for (int i = 0; i < taskQ.Count; i++)
             {
-                Console.WriteLine(String.Format("Task Number: {0}, Run Time: {1}, Arrival Time: {2}", i, tasks[i].RunTime, tasks[i].ArriveTime));
+                Console.WriteLine("Task Number: {0}, Run Time: {1}, Arrival Time: {2}", i, tasks[i].RunTime, tasks[i].ArriveTime);
             }
 
             Console.ReadLine();
