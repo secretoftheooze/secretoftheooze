@@ -33,8 +33,8 @@ namespace Scheduler
 
         // Properties
         // Read-only
-        public int RunTime { get { return runTime; } }      // Read-only property for the time it takes to process the task
-        public int ArriveTime { get { return arriveTime; } }   // Read-only property for the time the task arrives to be processed
+        public int RunTime { get { return runTime; } }          // Read-only property for the time it takes to process the task
+        public int ArriveTime { get { return arriveTime; } }    // Read-only property for the time the task arrives to be processed
 
         // Read-Write
         // To be manipulated by the algorithms
