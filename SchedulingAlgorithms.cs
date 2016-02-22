@@ -21,7 +21,7 @@ namespace Scheduler
         // Algorithm Values
         protected int clock;                                      // The global clock, initialized in ProcessTasks
         protected Queue<Task> waitingQ = new Queue<Task>();       // Queue of tasks waiting to be processed
-        protected Task currentProcess;                            // The task being 
+        protected Task currentProcess = new Task();               // The task being processed
         protected List<Task> completedTasks = new List<Task>();   // List of completed tasks
 
         // Standard constructor
@@ -57,6 +57,12 @@ namespace Scheduler
         {
             try
             {
+                // Create the directory if it does not already exist
+                if (!Directory.Exists(TESTDIR))
+                {
+                    Directory.CreateDirectory(TESTDIR);
+                }
+
                 using (StreamWriter sw = new StreamWriter(testPath))
                 {
                     // Start with the headers
@@ -64,21 +70,26 @@ namespace Scheduler
                     sw.WriteLine("Job#,Arrival Time, Run Time, Start Time, Time Left, End Time,  Waiting Time, Turnaround Time,");
 
                     // Initialize counters/accumulators
-                    int taskCount = 0;                  // Counts the number of tasks
+                    int taskCount = 0;                      // Counts the number of tasks
+                    int turnaroundTime = 0;                 // Stores current turnaround time 
+                    int waitTime = 0;                       // Stores current wait time
                     decimal averageWait = 0;                // Average wait time for the test
                     decimal averageTurnaround = 0;          // Average turnaround time for the test
 
                     // Then write each job's values
                     foreach (Task task in taskList)
                     {
+                        // Processes the waiting times (EndTime - StartTime - RunTime) and turnaround times (EndTime - RunTime) for each task
+                        waitTime = task.EndTime - task.ArriveTime - task.RunTime;
+                        turnaroundTime = task.EndTime - task.ArriveTime;
+
                         // Record all of the values the task has
-                        // Also processes the waiting times (EndTime - StartTime - RunTime) and turnaround times (EndTime - RunTime) for each task
-                        sw.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},", taskCount, task.ArriveTime, task.RunTime, task.StartTime, task.TimeLeft, task.EndTime, task.EndTime - task.StartTime - task.RunTime, task.EndTime - task.RunTime);
+                        sw.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},", taskCount, task.ArriveTime, task.RunTime, task.StartTime, task.TimeLeft, task.EndTime, waitTime, turnaroundTime);
 
                         // Increment counters/accumulators
                         taskCount++;
-                        averageWait = averageWait + task.EndTime - task.StartTime - task.RunTime;   // AverageWait + wait time for current task
-                        averageTurnaround = averageTurnaround + task.EndTime - task.RunTime;        // AverageTurnaround + turnaround time for current task
+                        averageWait = averageWait + waitTime;                           // AverageWait + wait time for current task
+                        averageTurnaround = averageTurnaround + turnaroundTime;         // AverageTurnaround + turnaround time for current task
                     }
 
                     // Process and output average wait and turnaround times

@@ -11,9 +11,9 @@ namespace Scheduler
         // Values
         int runTime;            // Time it takes to process the task
         int arriveTime;         // The time the task arrives to be processed
-        int startTime = -1;     // The time that the task starts processing. Initially set to -1.
+        int startTime;          // The time that the task starts processing. Initially set to -1.
         int timeLeft;           // The time left for the task to process, initially set as runTime and ticked down from there
-        int endTime = -1;       // The time that the task finished processing. Initially set to -1.
+        int endTime;            // The time that the task finished processing. Initially set to -1.
 
         // Stride specific values
         int tickets;        // How many tickets are alloted to the task for Stride scheduling
@@ -21,7 +21,16 @@ namespace Scheduler
         int passCount;      
 
 
-        // Constructor
+        // Constructors
+        public Task()
+        {
+            // Initialize variables
+            runTime = -1;
+            arriveTime = -1;
+            startTime = -1;
+            endTime = -1;
+        }
+
         // Set initial values for run time and arrival time
         public Task (int runTime, int arriveTime)
         {
@@ -29,6 +38,10 @@ namespace Scheduler
             this.arriveTime = arriveTime;
 
             timeLeft = runTime; // Sets the initial value for timeLeft
+
+            // Initialize start and end times
+            startTime = -1;
+            endTime = -1;
         }
 
         // Properties
