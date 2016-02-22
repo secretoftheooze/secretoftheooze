@@ -43,33 +43,31 @@ namespace Scheduler
                     waitingList.Add(taskQ.Dequeue());   // Adds the top task to the waitingList
                 }
 
-                // Check if there is a current process
-                if (currentProcess.StartTime == -1)
+                // Check if there is a current process and that there is a process to queue up
+                if (currentProcess.StartTime == -1 && waitingList.Count > 0)
                 {
-                    // Figure out which task has the shortest run time in the waiting list, if the waiting list isn't empty
-                    if (waitingList.Count != 0)
+                    // Figure out which task has the shortest run time in the waiting list
+
+                    // Initialize to the first task's run time 
+                    shortestRT = waitingList[0].RunTime;
+                    sjIndex = 0;
+
+                    // Check for the shortest job in the list
+                    for (int i = 1; i < waitingList.Count - 1; i++)
                     {
-                        // Initialize to the first task's run time 
-                        shortestRT = waitingList[0].RunTime;
-                        sjIndex = 0;
-
-                        // Check for the shortest job in the list
-                        for (int i = 1; i < waitingList.Count - 1; i++)
+                        if (waitingList[i].RunTime < shortestRT)
                         {
-                            if (waitingList[i].RunTime < shortestRT)
-                            {
-                                shortestRT = waitingList[i].RunTime;
-                                sjIndex = i;
-                            }
+                            shortestRT = waitingList[i].RunTime;
+                            sjIndex = i;
                         }
-
-                        // Set current process to shortest job, and initialize the task by setting its start time
-                        currentProcess = waitingList[sjIndex];
-                        currentProcess.StartTime = clock;
-
-                        // Remove the current process from the waiting list
-                        waitingList.Remove(waitingList[sjIndex]);
                     }
+
+                    // Set current process to shortest job, and initialize the task by setting its start time
+                    currentProcess = waitingList[sjIndex];
+                    currentProcess.StartTime = clock;
+
+                    // Remove the current process from the waiting list
+                    waitingList.Remove(waitingList[sjIndex]);
                 }
 
                 // Process the current task
@@ -80,14 +78,9 @@ namespace Scheduler
                 
 
                 // Check if task is done and add it to completedTasks list
-                if (currentProcess.TimeLeft == 0)
+                if (currentProcess.TimeLeft == 0 && currentProcess.StartTime > -1)
                 {
                     currentProcess.EndTime = clock;         // Set end time for the job
-
-                    // TESTING
-                    Console.WriteLine("Test {0} Run Time: {1}, Arrival Time: {2}, Start Time: {3}", testNum, currentProcess.RunTime, currentProcess.ArriveTime, currentProcess.StartTime);
-
-
                     completedTasks.Add(currentProcess);     // Add it to the completed task list
                     currentProcess = new Task();            // Resets the current process
                 }
@@ -106,5 +99,10 @@ namespace Scheduler
             OutputResults(algName);
         }
 
+    }
+
+    class PE_SJF : SJF
+    {
+        new string algName = "PE-SJF";                      // Pre-Emptive SJF
     }
 }

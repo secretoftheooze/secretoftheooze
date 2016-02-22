@@ -24,8 +24,9 @@ namespace Scheduler
             {
                 // Generate the tasks
                 taskQ = generateTasks(10, i);
-
+                //taskQ = testTasks();// TESTING
                 
+                /*
                 // Testing the queue generator (No issues, being used to compare to algorithm output now)
                 Task[] tasks = taskQ.ToArray();
 
@@ -33,10 +34,11 @@ namespace Scheduler
                 {
                     Console.WriteLine("Task Number: {0}, Run Time: {1}, Arrival Time: {2}", n, tasks[n].RunTime, tasks[n].ArriveTime);
                 }
-                
+                */
 
                 // Perform the tests with each of the algorithms
                 sjf.ProcessTasks(i, taskQ);
+                // Other algorithms
             }
 
             // Output results for each algorithm
@@ -51,7 +53,7 @@ namespace Scheduler
         private static Queue<Task> generateTasks(int numTasks, int rSeed)
         {
             Queue<Task> taskQ = new Queue<Task>();
-            Random rando = new Random((int) DateTime.Now.Ticks); // Initializes random number generator
+            Random rando = new Random((int) DateTime.Now.Ticks * rSeed); // Initializes random number generator
             int arriveAcc = 0; // Initialize arrive time accumulator
 
             // Generate each task and add it to the queue
@@ -66,7 +68,27 @@ namespace Scheduler
             }
 
             return taskQ;
+        }
 
+
+
+        // TEST FUNCTIONS
+        private static Queue<Task> testTasks()
+        {
+            Queue<Task> taskQ = new Queue<Task>();
+
+            taskQ.Enqueue(new Task(2, 0));
+            taskQ.Enqueue(new Task(18, 6));
+            taskQ.Enqueue(new Task(28, 11));
+            taskQ.Enqueue(new Task(30, 18));
+            taskQ.Enqueue(new Task(18, 24));
+            taskQ.Enqueue(new Task(41, 30));
+            taskQ.Enqueue(new Task(36, 36));
+            taskQ.Enqueue(new Task(24, 42));
+            taskQ.Enqueue(new Task(43, 48));
+            taskQ.Enqueue(new Task(37, 54));
+
+            return taskQ;
         }
     }
 }
