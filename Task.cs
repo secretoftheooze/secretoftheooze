@@ -9,11 +9,11 @@ namespace Scheduler
     class Task
     {
         // Values
-        int runTime;        // Time it takes to process the task
-        int arriveTime;     // The time the task arrives to be processed
-        int startTime;      // The time that the task starts processing
-        int timeLeft;       // The time left for the task to process, initially set as runTime and ticked down from there
-        int endTime;        // The time that the task finished processing
+        int runTime;            // Time it takes to process the task
+        int arriveTime;         // The time the task arrives to be processed
+        int startTime = -1;     // The time that the task starts processing. Initially set to -1.
+        int timeLeft;           // The time left for the task to process, initially set as runTime and ticked down from there
+        int endTime = -1;       // The time that the task finished processing. Initially set to -1.
 
         // Stride specific values
         int tickets;        // How many tickets are alloted to the task for Stride scheduling
