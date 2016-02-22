@@ -11,18 +11,24 @@ namespace Scheduler
     class SJF : SchedulingAlgorithm
     {
         new string algName = "SJF";                 // Set the algorithm name
-        List<Task> waitingList = new List<Task>();  // This algorithm uses a waiting List as opposed to a waiting Queue
+        List<Task> waitingList = new List<Task>();  // This algorithm uses a waiting list as opposed to a waiting Queue
 
         // Initialize the test
-        public SJF(int testNum)
+        // Altered initializer to factor in waitingList
+        protected void SJFInit(int testNum)
         {
+            // Call original Init
             Init(testNum, algName);
-            Console.WriteLine(testPath);
+
+            // Clear waitingList
+            waitingList.Clear();
         }
 
         // Hide original method, and proceed to process the tasks as per the algorithm
-        public new void ProcessTasks(Queue<Task> taskQ)
+        public new void ProcessTasks(int testNum, Queue<Task> taskQ)
         {
+            SJFInit(testNum);
+
             // Count the number of tasks that need to be completed
             int taskCount = taskQ.Count;
             int sjIndex;                        // Keeps track of the index of the shortest job in the waiting list 
@@ -66,9 +72,9 @@ namespace Scheduler
                     }
                 }
 
+                // Process the current task
                 else
                 {
-                    // Process the current task
                     currentProcess.TimeLeft--;
                 }
                 
@@ -81,7 +87,7 @@ namespace Scheduler
                     currentProcess = new Task();            // Resets the current process
                 }
 
-                // Increment clock and reset the loop
+                // Increment clock
                 clock++;
             }
 

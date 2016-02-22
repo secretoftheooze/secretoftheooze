@@ -15,15 +15,29 @@ namespace Scheduler
 
         static void Main(string[] args)
         {
+            // Initialize task queue and algorithms
+            Queue<Task> taskQ = new Queue<Task>();
+            SJF sjf = new SJF();
 
+            // Proceed to loop through all of the tests
+            for (int i = 1; i <= NUM_TESTS; i++)
+            {
+                // Generate the tasks
+                taskQ = generateTasks(10, i);
+
+                // Perform the tests with each of the algorithms
+                sjf.ProcessTasks(i, taskQ);
+            }
+
+            /*
             // Testing the queue generator, single test
-            Queue<Task> taskQ = generateTasks(NUM_TASKS);
             Task[] tasks = taskQ.ToArray();
 
             for (int i = 0; i < taskQ.Count; i++)
             {
                 Console.WriteLine("Task Number: {0}, Run Time: {1}, Arrival Time: {2}", i, tasks[i].RunTime, tasks[i].ArriveTime);
             }
+            */
 
             Console.ReadLine();
 
@@ -31,10 +45,10 @@ namespace Scheduler
 
         // Generate Tasks
         // Generates a queue of tasks of length numTasks, with run times and arrival times randomly generated
-        private static Queue<Task> generateTasks(int numTasks)
+        private static Queue<Task> generateTasks(int numTasks, int rSeed)
         {
             Queue<Task> taskQ = new Queue<Task>();
-            Random rando = new Random(); // Initializes random number generator
+            Random rando = new Random(rSeed); // Initializes random number generator
             int arriveAcc = 0; // Initialize arrive time accumulator
 
             // Generate each task and add it to the queue

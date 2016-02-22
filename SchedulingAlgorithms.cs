@@ -21,31 +21,40 @@ namespace Scheduler
         // Algorithm Values
         protected int clock;                                      // The global clock, initialized in ProcessTasks
         protected Queue<Task> waitingQ = new Queue<Task>();       // Queue of tasks waiting to be processed
-        protected Task currentProcess = new Task();               // The task being processed
+        protected Task currentProcess;                            // The task being processed
         protected List<Task> completedTasks = new List<Task>();   // List of completed tasks
 
         // Standard constructor
         // public SchedulingAlgorithm(int testNum) { }
 
         // Initialize the test
-        // Use this in inherited constructors
+        // Creates the file name for the test based on the number and algorithm name provided
         protected void Init(int testNum, string algName)
         {
-            testPath = String.Format("{0}/{1}_Test_{2}.csv", TESTDIR, algName, testNum);    // Constructs the filepath for the output file of the test (AlgorithmName_Test_TestNum.csv)
+            // Construct the filepath for the output file of the test (AlgorithmName_Test_TestNum.csv)
+            testPath = String.Format("{0}/{1}_Test_{2}.csv", TESTDIR, algName, testNum);
+
+            // Clear queues/lists
+            clock = 0;
+            waitingQ.Clear();
+            currentProcess = new Task();
+            completedTasks.Clear();
         }
 
         // The main algorithm - just a skeleton for the base class
-        public void ProcessTasks(Queue<Task> taskQ) { }
+        public void ProcessTasks(int testNum, Queue<Task> taskQ)
+        {
+            // Initialize the test settings and then run the test
+            Init(testNum, algName);
+        }
         /* ProcessTasks - General Mockup
-        
-            // Set clock to 0
-            clock = 0;
+            while (completedTasks < numTasks)
+            - Check for arrival and set current task OR process current task
+                - This may also be where a context switch is performed
+            - Check if current task is done
 
-            Set up a loop based on incrementing clock. May actually be able to set clock as part of a for loop.
-            With each "tick", we need to
-                - check if it's time to pop job from queue, by matching arrival time with clock time, then putting it in waitingQ
-                - Assess if a context switch is needed (switching processes by adding currentProcess to waitingQ, then popping the waitingQ and making it the currentProcess)
-                - Other shit 
+            Output(completedTasks)
+
         */
 
 
@@ -105,6 +114,9 @@ namespace Scheduler
                 Console.WriteLine("Error recording results for {0}", testPath);
                 Console.WriteLine("Error Message: {0}", e.Message);
             }
+
+            // For testing purposes
+            Console.WriteLine("Test file successfully generated for {0}", testPath);
         }
 
         // Output Final Results
