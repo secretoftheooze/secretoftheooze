@@ -12,20 +12,24 @@ namespace Scheduler
     class SchedulingAlgorithm
     {
         // Constants
-        const string TESTDIR = "Tests/";                // Test directory
+        protected const string TESTDIR = "Tests";                // Test directory
 
         // Algorithm Identifiers
-        string algName;                                 // Name of the algorithm, set in each derived algorithm class
-        string testPath;                                // The file path for the current test. Set in constructor
+        protected string algName;                                 // Name of the algorithm, set in each derived algorithm class
+        protected string testPath;                                // The file path for the current test. Set in Init
 
         // Algorithm Values
-        int clock;                                      // The global clock, initialized in ProcessTasks
-        Queue<Task> waitingQ = new Queue<Task>();       // Queue of tasks waiting to be processed
-        Task currentProcess;                            // The task being 
-        List<Task> completedTasks = new List<Task>();   // List of completed tasks
+        protected int clock;                                      // The global clock, initialized in ProcessTasks
+        protected Queue<Task> waitingQ = new Queue<Task>();       // Queue of tasks waiting to be processed
+        protected Task currentProcess;                            // The task being 
+        protected List<Task> completedTasks = new List<Task>();   // List of completed tasks
+
+        // Standard constructor
+        // public SchedulingAlgorithm(int testNum) { }
 
         // Initialize the test
-        public SchedulingAlgorithm(int testNum)
+        // Use this in inherited constructors
+        protected void Init(int testNum, string algName)
         {
             testPath = String.Format("{0}/{1}_Test_{2}.csv", TESTDIR, algName, testNum);    // Constructs the filepath for the output file of the test (AlgorithmName_Test_TestNum.csv)
         }
