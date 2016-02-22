@@ -87,6 +87,5 @@ namespace Scheduler
             get { return passCount; }
             set { passCount = value; }
         }
-
     }
 }

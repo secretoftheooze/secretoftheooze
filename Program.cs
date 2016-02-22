@@ -25,19 +25,22 @@ namespace Scheduler
                 // Generate the tasks
                 taskQ = generateTasks(10, i);
 
+                
+                // Testing the queue generator (No issues, being used to compare to algorithm output now)
+                Task[] tasks = taskQ.ToArray();
+
+                for (int n = 0; n < taskQ.Count; n++)
+                {
+                    Console.WriteLine("Task Number: {0}, Run Time: {1}, Arrival Time: {2}", n, tasks[n].RunTime, tasks[n].ArriveTime);
+                }
+                
+
                 // Perform the tests with each of the algorithms
                 sjf.ProcessTasks(i, taskQ);
             }
 
-            /*
-            // Testing the queue generator, single test
-            Task[] tasks = taskQ.ToArray();
-
-            for (int i = 0; i < taskQ.Count; i++)
-            {
-                Console.WriteLine("Task Number: {0}, Run Time: {1}, Arrival Time: {2}", i, tasks[i].RunTime, tasks[i].ArriveTime);
-            }
-            */
+            // Output results for each algorithm
+            sjf.OutputResults();
 
             Console.ReadLine();
 
@@ -48,7 +51,7 @@ namespace Scheduler
         private static Queue<Task> generateTasks(int numTasks, int rSeed)
         {
             Queue<Task> taskQ = new Queue<Task>();
-            Random rando = new Random(rSeed); // Initializes random number generator
+            Random rando = new Random((int) DateTime.Now.Ticks); // Initializes random number generator
             int arriveAcc = 0; // Initialize arrive time accumulator
 
             // Generate each task and add it to the queue
@@ -57,6 +60,9 @@ namespace Scheduler
             {
                 taskQ.Enqueue(new Task(rando.Next(2,60), arriveAcc));           // Queue a new task with a random run time of 2-60 units and a arrival time every 5-8 seconds
                 arriveAcc = arriveAcc + rando.Next(5, 8);                       // Tasks arrive every 5-8 units of time after previous task
+
+                // This will be where the Stride-specific values are set
+
             }
 
             return taskQ;

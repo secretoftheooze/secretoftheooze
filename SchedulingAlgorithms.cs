@@ -47,6 +47,7 @@ namespace Scheduler
             // Initialize the test settings and then run the test
             Init(testNum, algName);
         }
+       
         /* ProcessTasks - General Mockup
             while (completedTasks < numTasks)
             - Check for arrival and set current task OR process current task
@@ -57,9 +58,6 @@ namespace Scheduler
 
         */
 
-
-
-        // TEST ME PLEASE - Colin
         // Output
         // Processes the output of the ProcessTasks algorithm and outputs it into a CSV file
         public void OutputTest(List<Task> taskList)
@@ -102,11 +100,14 @@ namespace Scheduler
                     }
 
                     // Process and output average wait and turnaround times
-                    averageWait = averageWait / taskCount;                  // As far as I know, taskCount = NUM_TESTS as opposed to equaling taskList.Count. This is because the counter increments one more time in the loop than needed.
+                    averageWait = averageWait / taskCount;                  // taskCount is used since it equals NUM_TASKS as opposed to the largest index of completedTasks
                     averageTurnaround = averageTurnaround / taskCount;
 
                     sw.WriteLine("Average wait time: {0}", averageWait); // need to format for 3 decimal places. I forget how and I'm too tired now. - Colin
                     sw.WriteLine("Average turnaround time: {0}", averageTurnaround); // need to format for 3 decimal places. I forget how and I'm too tired now. - Colin
+
+                    // For testing purposes
+                    Console.WriteLine("Test file successfully generated for {0}", testPath);
                 }
             }
            catch (Exception e)
@@ -114,16 +115,66 @@ namespace Scheduler
                 Console.WriteLine("Error recording results for {0}", testPath);
                 Console.WriteLine("Error Message: {0}", e.Message);
             }
-
-            // For testing purposes
-            Console.WriteLine("Test file successfully generated for {0}", testPath);
         }
 
         // Output Final Results
-        // Cleans up all of the test files and puts them all together in one CSV file
         public void OutputResults()
         {
-            // Search for all of the CSV files
+            OutputResults(algName);
+        }
+
+        // Creates the final CSV final containing all tests for a single algorithm
+        protected void OutputResults(string algName)
+        {
+            // Generate a single file that will hold all of the tests
+
+            // See if test directory exists
+            if (Directory.Exists(TESTDIR))
+            {
+                string outputPath = String.Format("{0}/{1}_Output.csv", TESTDIR, algName);  // The filepath for the output file
+                string search = String.Format("*{0}_Test_*.csv", algName);                  // Creates a search string that specifies to the function that it should only collect files of a certain algorithm
+                string[] testFiles = Directory.GetFiles(TESTDIR, search);                   // Gets all of the file paths for the specified algorithm's tests
+                string currentTest;                                                         // The contents of the current test
+
+
+                // Construct the new file
+                try
+                {
+                    using (StreamWriter sw = new StreamWriter(outputPath))
+                    {
+                        // Header
+                        sw.WriteLine("{0} Test Results", algName);
+                        sw.WriteLine();
+                        
+                        // Results for each test
+                        for (int i = 0; i < testFiles.Length; i++)
+                        {
+                            // Get the text of the current test
+                            currentTest = File.ReadAllText(testFiles[i]);
+
+                            // Create a header for the current test (index + 1)
+                            sw.WriteLine("Test {0}", i+1);
+
+                            // Paste the contents of the test
+                            sw.Write(currentTest);
+                            
+                            // Space out each test
+                            sw.WriteLine();
+
+                            // Delete collected file
+                            File.Delete(testFiles[i]);
+                        }
+                    }
+
+                    // For testing
+                    Console.WriteLine("Results collected for {0}", outputPath);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error collecting results for {0}", outputPath);
+                    Console.WriteLine("Error Message: {0}", e.Message);
+                }                
+            }
         }
     }
 }

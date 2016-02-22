@@ -83,6 +83,11 @@ namespace Scheduler
                 if (currentProcess.TimeLeft == 0)
                 {
                     currentProcess.EndTime = clock;         // Set end time for the job
+
+                    // TESTING
+                    Console.WriteLine("Test {0} Run Time: {1}, Arrival Time: {2}, Start Time: {3}", testNum, currentProcess.RunTime, currentProcess.ArriveTime, currentProcess.StartTime);
+
+
                     completedTasks.Add(currentProcess);     // Add it to the completed task list
                     currentProcess = new Task();            // Resets the current process
                 }
@@ -93,6 +98,12 @@ namespace Scheduler
 
             // After processing, output the results
             OutputTest(completedTasks);
+        }
+
+        // Clean up all of the files and output the results
+        public new void OutputResults()
+        {
+            OutputResults(algName);
         }
 
     }
