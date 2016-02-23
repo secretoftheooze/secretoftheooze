@@ -1,5 +1,5 @@
 ﻿// COIS 3320 A1: Task Class
-// Colin A. Marshall(0533528) and Brandon Root(SID)
+// Colin A. Marshall(0533528) and Brandon Root(0564499)
 // The general data structure that stores all the data for a specific job being processed
 
 using System;

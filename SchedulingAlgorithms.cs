@@ -1,5 +1,5 @@
 ﻿// COIS 3320 A1: SchedulingAlgorithms
-// Colin A. Marshall(0533528) and Brandon Root(SID)
+// Colin A. Marshall(0533528) and Brandon Root(0564499)
 // Contains the scheduling algorithms used for testing
 
 using System;

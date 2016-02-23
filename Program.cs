@@ -1,5 +1,5 @@
 ﻿// COIS 3320 A1: Program
-// Colin A. Marshall(0533528) and Brandon Root(SID)
+// Colin A. Marshall(0533528) and Brandon Root(0564499)
 // The main program that performs the tests, using the algorithms defined in SchedulingAlgorithms
 
 using System;
@@ -17,7 +17,8 @@ namespace Scheduler
         {
             // Initialize task queue and algorithms
             Queue<Task> taskQ = new Queue<Task>();
-            SJF sjf = new SJF();
+            //SJF sjf = new SJF();
+            FIFO fifo = new FIFO();
 
             // Proceed to loop through all of the tests
             for (int i = 1; i <= NUM_TESTS; i++)
@@ -37,12 +38,14 @@ namespace Scheduler
                 */
 
                 // Perform the tests with each of the algorithms
-                sjf.ProcessTasks(i, taskQ);
+               // sjf.ProcessTasks(i, taskQ);
+                fifo.ProcessTasks(i, taskQ);
                 // Other algorithms
             }
 
             // Output results for each algorithm
-            sjf.OutputResults();
+            //sjf.OutputResults();
+            fifo.OutputResults();
 
             Console.ReadLine();
 
