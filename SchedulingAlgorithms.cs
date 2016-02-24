@@ -132,7 +132,7 @@ namespace Scheduler
             if (Directory.Exists(TESTDIR))
             {
                 string outputPath = String.Format("{0}/{1}_Output.csv", TESTDIR, algName);  // The filepath for the output file
-                string search = String.Format("*{0}_Test_*.csv", algName);                  // Creates a search string that specifies to the function that it should only collect files of a certain algorithm
+                string search = String.Format("{0}_Test_*.csv", algName);                  // Creates a search string that specifies to the function that it should only collect files of a certain algorithm
                 string[] testFiles = Directory.GetFiles(TESTDIR, search);                   // Gets all of the file paths for the specified algorithm's tests
                 string currentTest;                                                         // The contents of the current test
 

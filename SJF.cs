@@ -10,12 +10,12 @@ namespace Scheduler
 {
     class SJF : SchedulingAlgorithm
     {
-        new string algName = "SJF";                 // Set the algorithm name
-        List<Task> waitingList = new List<Task>();  // This algorithm uses a waiting list as opposed to a waiting Queue
+        new string algName = "SJF";                           // Set the algorithm name
+        protected List<Task> waitingList = new List<Task>();  // This algorithm uses a waiting list as opposed to a waiting Queue
 
         // Initialize the test
         // Altered initializer to factor in waitingList
-        protected void SJFInit(int testNum)
+        private void SJFInit(int testNum)
         {
             // Call original Init
             Init(testNum, algName);
@@ -32,7 +32,7 @@ namespace Scheduler
             // Count the number of tasks that need to be completed
             int taskCount = taskQ.Count;
             int sjIndex;                        // Keeps track of the index of the shortest job in the waiting list 
-            int shortestRT;                     // Keeps track of the shortest run time in the waiting list 
+            
 
             // It is considered done once the completed tasks equals the size of the original arrival queue
             while (completedTasks.Count < taskCount)
@@ -48,19 +48,7 @@ namespace Scheduler
                 {
                     // Figure out which task has the shortest run time in the waiting list
 
-                    // Initialize to the first task's run time 
-                    shortestRT = waitingList[0].RunTime;
-                    sjIndex = 0;
-
-                    // Check for the shortest job in the list
-                    for (int i = 1; i < waitingList.Count - 1; i++)
-                    {
-                        if (waitingList[i].RunTime < shortestRT)
-                        {
-                            shortestRT = waitingList[i].RunTime;
-                            sjIndex = i;
-                        }
-                    }
+                    sjIndex = shortestJob(waitingList);
 
                     // Set current process to shortest job, and initialize the task by setting its start time
                     currentProcess = waitingList[sjIndex];
@@ -93,6 +81,31 @@ namespace Scheduler
             OutputTest(completedTasks);
         }
 
+        // Determines the shortest job in the waiting list
+        protected int shortestJob(List<Task> jobList)
+        {
+            int shortestRT;                     // Keeps track of the shortest run time in the waiting list 
+            int index;                          // Keeps track of the index of the shortest job in the waiting list
+
+            // Initialize to the first task's run time 
+            shortestRT = jobList[0].TimeLeft;
+            index = 0;
+
+            // Check for the shortest job in the list
+            for (int i = 1; i < jobList.Count; i++)
+            {
+                if (jobList[i].TimeLeft < shortestRT)
+                {
+                    shortestRT = jobList[i].TimeLeft;
+                    index = i;
+                }
+
+                Console.WriteLine("Shortest Run Time: {0} Clock: {1}", shortestRT, clock);
+            }
+
+            return index;
+        }
+
         // Clean up all of the files and output the results
         public new void OutputResults()
         {
@@ -101,9 +114,100 @@ namespace Scheduler
 
     }
 
-    //class PE_SJF : SJF
-    //{
-    //    new string algName = "PE-SJF";                      // Pre-Emptive SJF
-    //}
+    class PE_SJF : SJF
+    {
+        new string algName = "PE-SJF";                      // Pre-Emptive SJF
 
+        // Initialize the test
+        // Altered initializer to factor in waitingList
+        private void PESJFInit(int testNum)
+        {
+            // Call original Init
+            Init(testNum, algName);
+
+            // Clear waitingList
+            waitingList.Clear();
+        }
+
+        // Hide original method, and proceed to process the tasks as per the algorithm
+        public new void ProcessTasks(int testNum, Queue<Task> taskQ)
+        {
+            PESJFInit(testNum);
+
+            // Count the number of tasks that need to be completed
+            int taskCount = taskQ.Count;
+            int sjIndex;                        // Keeps track of the index of the shortest job in the waiting list 
+
+
+            // It is considered done once the completed tasks equals the size of the original arrival queue
+            while (completedTasks.Count < taskCount)
+            {
+                // Check for new arrivals, and if the arrival queue is empty
+                if (taskQ.Count > 0 && taskQ.Peek().ArriveTime == clock)
+                {
+                    //waitingList.Add(taskQ.Dequeue());   // Adds the top task to the waitingList
+
+                    // Context Switch
+                    // Determine if the new arrival has a short enough run time that it justifies switching jobs
+                    if (currentProcess.TimeLeft <= taskQ.Peek().TimeLeft)
+                    {
+                        waitingList.Add(taskQ.Dequeue());   // Adds the top task to the waitingList
+                    }
+
+                    else
+                    {
+                        waitingList.Add(currentProcess);   // Adds current process to waiting list
+                        currentProcess = taskQ.Dequeue();  // Sets current process to new arrival
+                        currentProcess.StartTime = clock;  // Set the start time for the new current process
+                    }
+                }
+
+                // Check if there is a current process and that there is a process to queue up
+                if (currentProcess.StartTime == -1 && waitingList.Count > 0)
+                {
+                    // Figure out which task has the shortest run time in the waiting list
+                    sjIndex = shortestJob(waitingList);
+
+                    // Set current process to shortest job, and initialize the task by setting its start time
+                    currentProcess = waitingList[sjIndex];
+
+                    // Set start time if it has not been set before
+                    if (currentProcess.StartTime == -1)
+                    {
+                        currentProcess.StartTime = clock;
+                    }
+                   
+                    // Remove the current process from the waiting list
+                    waitingList.Remove(waitingList[sjIndex]);
+                }
+
+                // Process the current task, unless there was a recent context switch on this tick
+                else if(currentProcess.StartTime != clock)
+                {
+                    currentProcess.TimeLeft--;
+                }
+
+
+                // Check if task is done and add it to completedTasks list
+                if (currentProcess.TimeLeft == 0 && currentProcess.StartTime > -1)
+                {
+                    currentProcess.EndTime = clock;         // Set end time for the job
+                    completedTasks.Add(currentProcess);     // Add it to the completed task list
+                    currentProcess = new Task();            // Resets the current process
+                }
+
+                // Increment clock
+                clock++;
+            }
+
+            // After processing, output the results
+            OutputTest(completedTasks);
+        }
+
+        // Clean up all of the files and output the results
+        public new void OutputResults()
+        {
+            OutputResults(algName);
+        }
+    }
 }
