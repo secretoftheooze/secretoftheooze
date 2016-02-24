@@ -6,31 +6,19 @@ using System;
 
 namespace Scheduler
 {
-    class Task
+    struct Task
     {
         // Values
-        int runTime;            // Time it takes to process the task
-        int arriveTime;         // The time the task arrives to be processed
-        int startTime;          // The time that the task starts processing. Initially set to -1.
-        int timeLeft;           // The time left for the task to process, initially set as runTime and ticked down from there
-        int endTime;            // The time that the task finished processing. Initially set to -1.
+        public int runTime;            // Time it takes to process the task
+        public int arriveTime;         // The time the task arrives to be processed
+        public int startTime;          // The time that the task starts processing. Initially set to -1.
+        public int timeLeft;           // The time left for the task to process, initially set as runTime and ticked down from there
+        public int endTime;            // The time that the task finished processing. Initially set to -1.
 
         // Stride specific values
-        int tickets;        // How many tickets are alloted to the task for Stride scheduling
-        int stride;         // Stride value, determined by stride algorithm
-        int passCount;      
-
-
-        // Constructors
-        public Task()
-        {
-            // Initialize variables
-            runTime = -1;
-            arriveTime = -1;
-            startTime = -1;
-            endTime = -1;
-            timeLeft = -1;
-        }
+        public int tickets;        // How many tickets are alloted to the task for Stride scheduling
+        public int stride;         // Stride value, determined by stride algorithm
+        public int passCount;
 
         // Set initial values for run time and arrival time
         public Task (int runTime, int arriveTime)
@@ -43,50 +31,20 @@ namespace Scheduler
             // Initialize start and end times
             startTime = -1;
             endTime = -1;
+        
+            tickets = 0;        
+            stride = 0;         
+            passCount = 0;
         }
 
-        // Properties
-        // Read-only
-        public int RunTime { get { return runTime; } }          // Read-only property for the time it takes to process the task
-        public int ArriveTime { get { return arriveTime; } }    // Read-only property for the time the task arrives to be processed
-
-        // Read-Write
-        // To be manipulated by the algorithms
-        public int StartTime
+        // isEmpty Function
+        // Function to check if the structure is empty or not. Used in conditions.
+        public bool isEmpty()
         {
-            get { return startTime; }
-            set { startTime = value;  }
-        }
-
-        public int TimeLeft
-        {
-            get { return timeLeft; }
-            set { timeLeft = value; }
-        }
-
-        public int EndTime
-        {
-            get { return endTime; }
-            set { endTime = value; }
-        }
-
-        // Stride specific properties
-        public int Tickets
-        {
-            get { return tickets; }
-            set { tickets = value; }
-        }
-
-        public int Stride
-        {
-            get { return stride; }
-            set { stride = value; }
-        }
-
-        public int PassCount
-        {
-            get { return passCount; }
-            set { passCount = value; }
+            if (runTime == 0)
+                return true;
+            else
+                return false;
         }
     }
 }

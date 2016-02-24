@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections;
 
 
 namespace Scheduler
@@ -17,7 +18,8 @@ namespace Scheduler
         {
             // Initialize task queue and algorithms
             Queue<Task> taskQ = new Queue<Task>();
-            //SJF sjf = new SJF();
+            SJF sjf = new SJF();
+            PE_SJF pesjf = new PE_SJF();
             FIFO fifo = new FIFO();
 
             // Proceed to loop through all of the tests
@@ -26,7 +28,7 @@ namespace Scheduler
                 // Generate the tasks
                 taskQ = generateTasks(10, i);
                 //taskQ = testTasks();// TESTING
-                
+               
                 /*
                 // Testing the queue generator (No issues, being used to compare to algorithm output now)
                 Task[] tasks = taskQ.ToArray();
@@ -38,13 +40,15 @@ namespace Scheduler
                 */
 
                 // Perform the tests with each of the algorithms
-               // sjf.ProcessTasks(i, taskQ);
-                fifo.ProcessTasks(i, taskQ);
+                sjf.ProcessTasks(i, new Queue<Task>(taskQ));
+                pesjf.ProcessTasks(i, new Queue<Task>(taskQ));
+                fifo.ProcessTasks(i, new Queue<Task>(taskQ));
                 // Other algorithms
             }
 
             // Output results for each algorithm
-            //sjf.OutputResults();
+            sjf.OutputResults();
+            pesjf.OutputResults();
             fifo.OutputResults();
 
             Console.ReadLine();
@@ -82,7 +86,7 @@ namespace Scheduler
 
             taskQ.Enqueue(new Task(2, 0));
             taskQ.Enqueue(new Task(18, 6));
-            taskQ.Enqueue(new Task(28, 11));
+            taskQ.Enqueue(new Task(2, 11));
             taskQ.Enqueue(new Task(30, 18));
             taskQ.Enqueue(new Task(18, 24));
             taskQ.Enqueue(new Task(41, 30));

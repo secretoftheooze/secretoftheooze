@@ -17,7 +17,7 @@ namespace Scheduler
         }
 
 
-        public new void ProcessTasks(int testNum, Queue<Task> taskQ, int timeSlice)
+        public void ProcessTasks(int testNum, Queue<Task> taskQ, int timeSlice)
         {
             RRInit(testNum);
 
@@ -29,24 +29,24 @@ namespace Scheduler
             while (completedTasks.Count < taskCount)
             {
 
-                if (taskQ.Count > 0 && taskQ.Peek().ArriveTime == clock)
+                if (taskQ.Count > 0 && taskQ.Peek().arriveTime == clock)
                 {
                     waitingQ.Enqueue(taskQ.Dequeue()); // Adds the top task to the waitingQ
                 }
 
-                if (currentProcess.StartTime == -1 && waitingQ.Count > 0)
+                if (currentProcess.isEmpty() && waitingQ.Count > 0)
                 {
                     currentProcess = waitingQ.Dequeue();
-                    currentProcess.StartTime = clock;
-                    currentRT = currentProcess.RunTime;
+                    currentProcess.startTime = clock;
+                    currentRT = currentProcess.runTime;
                 }
 
                 if(count < timeSlice)
                 { 
                     // Check if task is done and add it to completedTasks list
-                    if (currentProcess.TimeLeft == 0)
+                    if (currentProcess.timeLeft == 0 && !currentProcess.isEmpty())
                     {
-                        currentProcess.EndTime = clock;         // Set end time for the job
+                        currentProcess.endTime = clock;         // Set end time for the job
                         completedTasks.Add(currentProcess);     // Add it to the completed task list
                         currentProcess = new Task();            // Resets the current process
                         count = 0;               
@@ -55,7 +55,7 @@ namespace Scheduler
                     else
                     {
                         // Process the current task
-                        currentProcess.TimeLeft--;
+                        currentProcess.timeLeft--;
 
                     }
                     // Increment clock and reset the loop

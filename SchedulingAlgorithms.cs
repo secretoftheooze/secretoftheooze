@@ -87,11 +87,11 @@ namespace Scheduler
                     foreach (Task task in taskList)
                     {
                         // Processes the waiting times (EndTime - StartTime - RunTime) and turnaround times (EndTime - RunTime) for each task
-                        waitTime = task.EndTime - task.ArriveTime - task.RunTime;
-                        turnaroundTime = task.EndTime - task.ArriveTime;
+                        waitTime = task.endTime - task.arriveTime - task.runTime;
+                        turnaroundTime = task.endTime - task.arriveTime;
 
                         // Record all of the values the task has
-                        sw.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},", taskCount, task.ArriveTime, task.RunTime, task.StartTime, task.TimeLeft, task.EndTime, waitTime, turnaroundTime);
+                        sw.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},", taskCount, task.arriveTime, task.runTime, task.startTime, task.timeLeft, task.endTime, waitTime, turnaroundTime);
 
                         // Increment counters/accumulators
                         taskCount++;

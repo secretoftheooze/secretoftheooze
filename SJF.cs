@@ -38,13 +38,13 @@ namespace Scheduler
             while (completedTasks.Count < taskCount)
             {
                 // Check for new arrivals, and if the arrival queue is empty
-                if (taskQ.Count > 0 && taskQ.Peek().ArriveTime == clock)
+                if (taskQ.Count > 0 && taskQ.Peek().arriveTime == clock)
                 {
                     waitingList.Add(taskQ.Dequeue());   // Adds the top task to the waitingList
                 }
 
                 // Check if there is a current process and that there is a process to queue up
-                if (currentProcess.StartTime == -1 && waitingList.Count > 0)
+                if (currentProcess.isEmpty() && waitingList.Count > 0)
                 {
                     // Figure out which task has the shortest run time in the waiting list
 
@@ -52,7 +52,7 @@ namespace Scheduler
 
                     // Set current process to shortest job, and initialize the task by setting its start time
                     currentProcess = waitingList[sjIndex];
-                    currentProcess.StartTime = clock;
+                    currentProcess.startTime = clock;
 
                     // Remove the current process from the waiting list
                     waitingList.Remove(waitingList[sjIndex]);
@@ -61,14 +61,14 @@ namespace Scheduler
                 // Process the current task
                 else
                 {
-                    currentProcess.TimeLeft--;
+                    currentProcess.timeLeft--;
                 }
                 
 
                 // Check if task is done and add it to completedTasks list
-                if (currentProcess.TimeLeft == 0)
+                if (currentProcess.timeLeft == 0 && !currentProcess.isEmpty())
                 {
-                    currentProcess.EndTime = clock;         // Set end time for the job
+                    currentProcess.endTime = clock;         // Set end time for the job
                     completedTasks.Add(currentProcess);     // Add it to the completed task list
                     currentProcess = new Task();            // Resets the current process
                 }
@@ -88,19 +88,17 @@ namespace Scheduler
             int index;                          // Keeps track of the index of the shortest job in the waiting list
 
             // Initialize to the first task's run time 
-            shortestRT = jobList[0].TimeLeft;
+            shortestRT = jobList[0].timeLeft;
             index = 0;
 
             // Check for the shortest job in the list
             for (int i = 1; i < jobList.Count; i++)
             {
-                if (jobList[i].TimeLeft < shortestRT)
+                if (jobList[i].timeLeft < shortestRT)
                 {
-                    shortestRT = jobList[i].TimeLeft;
+                    shortestRT = jobList[i].timeLeft;
                     index = i;
                 }
-
-                Console.WriteLine("Shortest Run Time: {0} Clock: {1}", shortestRT, clock);
             }
 
             return index;
@@ -143,13 +141,13 @@ namespace Scheduler
             while (completedTasks.Count < taskCount)
             {
                 // Check for new arrivals, and if the arrival queue is empty
-                if (taskQ.Count > 0 && taskQ.Peek().ArriveTime == clock)
+                if (taskQ.Count > 0 && taskQ.Peek().arriveTime == clock)
                 {
                     //waitingList.Add(taskQ.Dequeue());   // Adds the top task to the waitingList
 
                     // Context Switch
                     // Determine if the new arrival has a short enough run time that it justifies switching jobs
-                    if (currentProcess.TimeLeft <= taskQ.Peek().TimeLeft)
+                    if (currentProcess.timeLeft <= taskQ.Peek().timeLeft)
                     {
                         waitingList.Add(taskQ.Dequeue());   // Adds the top task to the waitingList
                     }
@@ -158,12 +156,12 @@ namespace Scheduler
                     {
                         waitingList.Add(currentProcess);   // Adds current process to waiting list
                         currentProcess = taskQ.Dequeue();  // Sets current process to new arrival
-                        currentProcess.StartTime = clock;  // Set the start time for the new current process
+                        currentProcess.startTime = clock;  // Set the start time for the new current process
                     }
                 }
 
                 // Check if there is a current process and that there is a process to queue up
-                if (currentProcess.StartTime == -1 && waitingList.Count > 0)
+                if (currentProcess.isEmpty() && waitingList.Count > 0)
                 {
                     // Figure out which task has the shortest run time in the waiting list
                     sjIndex = shortestJob(waitingList);
@@ -172,9 +170,9 @@ namespace Scheduler
                     currentProcess = waitingList[sjIndex];
 
                     // Set start time if it has not been set before
-                    if (currentProcess.StartTime == -1)
+                    if (currentProcess.startTime == -1)
                     {
-                        currentProcess.StartTime = clock;
+                        currentProcess.startTime = clock;
                     }
                    
                     // Remove the current process from the waiting list
@@ -182,16 +180,16 @@ namespace Scheduler
                 }
 
                 // Process the current task, unless there was a recent context switch on this tick
-                else if(currentProcess.StartTime != clock)
+                else if(currentProcess.startTime != clock)
                 {
-                    currentProcess.TimeLeft--;
+                    currentProcess.timeLeft--;
                 }
 
 
                 // Check if task is done and add it to completedTasks list
-                if (currentProcess.TimeLeft == 0)
+                if (currentProcess.timeLeft == 0 && !currentProcess.isEmpty())
                 {
-                    currentProcess.EndTime = clock;         // Set end time for the job
+                    currentProcess.endTime = clock;         // Set end time for the job
                     completedTasks.Add(currentProcess);     // Add it to the completed task list
                     currentProcess = new Task();            // Resets the current process
                 }
