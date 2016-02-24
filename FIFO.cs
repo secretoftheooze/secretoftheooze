@@ -28,13 +28,18 @@ namespace Scheduler
 
             while (completedTasks.Count < taskCount)
             {
+                if (taskQ.Count > 0 && taskQ.Peek().ArriveTime == clock)
+                {
+                    waitingQ.Enqueue(taskQ.Dequeue()); // Adds the top task to the waitingQ
+                }
 
                 if (currentProcess.StartTime == -1 && taskQ.Count > 0)
                 {
-                    //waitingQ.Enqueue(taskQ.Dequeue());
-                    currentProcess = taskQ.Dequeue();
-                currentProcess.StartTime = clock;
-                currentRT = currentProcess.RunTime;
+                   
+                    
+                    currentProcess = waitingQ.Dequeue();
+                    currentProcess.StartTime = clock;
+                    currentRT = currentProcess.RunTime;
 
 
                         // Check if task is done and add it to completedTasks list
