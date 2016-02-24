@@ -24,46 +24,52 @@ namespace Scheduler
             // Count the number of tasks that need to be completed
             int taskCount = taskQ.Count;
             int currentRT;  // Keeps track of current tasks runtime
-            int i; // counter for timeslece loop
+            int count = 0; // counter for timeslice loop
 
             while (completedTasks.Count < taskCount)
             {
-                
+
                 if (taskQ.Count > 0 && taskQ.Peek().ArriveTime == clock)
                 {
                     waitingQ.Enqueue(taskQ.Dequeue()); // Adds the top task to the waitingQ
                 }
-                for (i = 0; i < timeSlice; i++)
+
+                if (currentProcess.StartTime == -1 && waitingQ.Count > 0)
                 {
-                    if (currentProcess.StartTime == -1 && waitingQ.Count > 0)
-                    {
+                    currentProcess = waitingQ.Dequeue();
+                    currentProcess.StartTime = clock;
+                    currentRT = currentProcess.RunTime;
+                }
 
-
-                        currentProcess = waitingQ.Dequeue();
-                        currentProcess.StartTime = clock;
-                        currentRT = currentProcess.RunTime;
-
-                    }
+                if(count < timeSlice)
+                { 
                     // Check if task is done and add it to completedTasks list
                     if (currentProcess.TimeLeft == 0)
                     {
                         currentProcess.EndTime = clock;         // Set end time for the job
                         completedTasks.Add(currentProcess);     // Add it to the completed task list
                         currentProcess = new Task();            // Resets the current process
+                        count = 0;               
                     }
+                    
                     else
                     {
                         // Process the current task
                         currentProcess.TimeLeft--;
-                    }
 
+                    }
                     // Increment clock and reset the loop
                     clock++;
+                    count++;
                 }
-                waitingQ.Enqueue(currentProcess);
+                if (count == timeSlice)
+                {
+                    taskQ.Enqueue(currentProcess);
+                    count = 0;
+                }
             }
-
-
+            
+        
             // After processing, output the results
             OutputTest(completedTasks);
         }
