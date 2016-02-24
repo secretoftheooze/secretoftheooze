@@ -66,7 +66,7 @@ namespace Scheduler
                 
 
                 // Check if task is done and add it to completedTasks list
-                if (currentProcess.TimeLeft == 0 && currentProcess.StartTime > -1)
+                if (currentProcess.TimeLeft == 0)
                 {
                     currentProcess.EndTime = clock;         // Set end time for the job
                     completedTasks.Add(currentProcess);     // Add it to the completed task list
@@ -189,7 +189,7 @@ namespace Scheduler
 
 
                 // Check if task is done and add it to completedTasks list
-                if (currentProcess.TimeLeft == 0 && currentProcess.StartTime > -1)
+                if (currentProcess.TimeLeft == 0)
                 {
                     currentProcess.EndTime = clock;         // Set end time for the job
                     completedTasks.Add(currentProcess);     // Add it to the completed task list

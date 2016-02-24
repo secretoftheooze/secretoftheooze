@@ -29,6 +29,7 @@ namespace Scheduler
             arriveTime = -1;
             startTime = -1;
             endTime = -1;
+            timeLeft = -1;
         }
 
         // Set initial values for run time and arrival time
