@@ -14,6 +14,7 @@ namespace Scheduler
         const int NUM_TESTS = 20;            // The number of tests being done
         const int NUM_TASKS = 10;            // The number of jobs being generated for processing 
         const int SYSTEM_STRIDE = 1000;      // System value used to calculate strides
+        const int TS1 = 5;                   // Time slice 1 - used by Stride and Round Robin
 
         static void Main(string[] args)
         {
@@ -22,6 +23,7 @@ namespace Scheduler
             SJF sjf = new SJF();
             PE_SJF pesjf = new PE_SJF();
             FIFO fifo = new FIFO();
+            Stride stride = new Stride();
 
             // Proceed to loop through all of the tests
             for (int i = 1; i <= NUM_TESTS; i++)
@@ -44,6 +46,7 @@ namespace Scheduler
                 sjf.ProcessTasks(i, new Queue<Task>(taskQ));
                 pesjf.ProcessTasks(i, new Queue<Task>(taskQ));
                 fifo.ProcessTasks(i, new Queue<Task>(taskQ));
+                stride.ProcessTasks(i, new Queue<Task>(taskQ), TS1);
                 // Other algorithms
             }
 
@@ -51,6 +54,7 @@ namespace Scheduler
             sjf.OutputResults();
             pesjf.OutputResults();
             fifo.OutputResults();
+            stride.OutputResults();
 
             Console.ReadLine();
 

@@ -74,7 +74,7 @@ namespace Scheduler
                 {
                     // Start with the headers
                     // Note: Stride algorithm has its own output that adds the stride specific values
-                    sw.WriteLine("Job#,Arrival Time, Run Time, Start Time, Time Left, End Time,  Waiting Time, Turnaround Time,");
+                    sw.WriteLine("Job#,Arrival Time, Run Time, Start Time, Time Left, Tickets, Stride, PASS Count, End Time, Waiting Time, Turnaround Time,");
 
                     // Initialize counters/accumulators
                     int taskCount = 0;                      // Counts the number of tasks
@@ -91,7 +91,7 @@ namespace Scheduler
                         turnaroundTime = task.endTime - task.arriveTime;
 
                         // Record all of the values the task has
-                        sw.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},", taskCount, task.arriveTime, task.runTime, task.startTime, task.timeLeft, task.endTime, waitTime, turnaroundTime);
+                        sw.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},", taskCount, task.arriveTime, task.runTime, task.startTime, task.timeLeft, task.tickets, task.stride, task.passCount, task.endTime, waitTime, turnaroundTime);
 
                         // Increment counters/accumulators
                         taskCount++;

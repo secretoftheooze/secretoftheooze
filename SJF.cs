@@ -81,11 +81,12 @@ namespace Scheduler
             OutputTest(completedTasks);
         }
 
-        // Determines the shortest job in the waiting list
+        // ShortestJob
+        // Determines the shortest job in a list of jobs
         protected int shortestJob(List<Task> jobList)
         {
-            int shortestRT;                     // Keeps track of the shortest run time in the waiting list 
-            int index;                          // Keeps track of the index of the shortest job in the waiting list
+            int shortestRT;                     // Keeps track of the shortest run time in the job list 
+            int index;                          // Keeps track of the index of the shortest job in the job list
 
             // Initialize to the first task's run time 
             shortestRT = jobList[0].timeLeft;

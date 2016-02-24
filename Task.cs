@@ -37,6 +37,26 @@ namespace Scheduler
             passCount = 0;
         }
 
+        // hasStarted Function
+        // Checks if the task has been started or not
+        public bool hasStarted()
+        {
+            if (startTime > -1)
+                return true;
+            else
+                return false;
+        }
+
+        // isDone Function
+        // Checks if the task is finished processing
+        public bool isDone()
+        {
+            if (timeLeft == 0 && !isEmpty())           // Is only done if it has actually been processed
+                return true;
+            else
+                return false;
+        }
+
         // isEmpty Function
         // Function to check if the structure is empty or not. Used in conditions.
         public bool isEmpty()
