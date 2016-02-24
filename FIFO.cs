@@ -33,32 +33,32 @@ namespace Scheduler
                     waitingQ.Enqueue(taskQ.Dequeue()); // Adds the top task to the waitingQ
                 }
 
-                if (currentProcess.StartTime == -1 && taskQ.Count > 0)
+                if (currentProcess.StartTime == -1 && waitingQ.Count > 0)
                 {
-                   
-                    
+
+
                     currentProcess = waitingQ.Dequeue();
                     currentProcess.StartTime = clock;
                     currentRT = currentProcess.RunTime;
 
-
-                        // Check if task is done and add it to completedTasks list
-                        if (currentProcess.TimeLeft == 0)
-                        {
-                            currentProcess.EndTime = clock;         // Set end time for the job
-                            completedTasks.Add(currentProcess);     // Add it to the completed task list
-                            currentProcess = new Task();            // Resets the current process
-                        }
-                        else
-                        {
-                            // Process the current task
-                            currentProcess.TimeLeft--;
-                        }
-
-                        // Increment clock and reset the loop
-                        clock++;
-                    }
                 }
+                    // Check if task is done and add it to completedTasks list
+                    if (currentProcess.TimeLeft == 0 )
+                    {
+                        currentProcess.EndTime = clock;         // Set end time for the job
+                        completedTasks.Add(currentProcess);     // Add it to the completed task list
+                        currentProcess = new Task();            // Resets the current process
+                    }
+                    else
+                    {
+                        // Process the current task
+                        currentProcess.TimeLeft--;
+                    }
+
+                    // Increment clock and reset the loop
+                    clock++;
+                }
+            
 
                 // After processing, output the results
                 OutputTest(completedTasks);
