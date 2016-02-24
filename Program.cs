@@ -11,8 +11,9 @@ namespace Scheduler
 {
     class Program
     {
-        const int NUM_TESTS = 20;   // The number of tests being done
-        const int NUM_TASKS = 10;   // The number of jobs being generated for processing 
+        const int NUM_TESTS = 20;            // The number of tests being done
+        const int NUM_TASKS = 10;            // The number of jobs being generated for processing 
+        const int SYSTEM_STRIDE = 1000;      // System value used to calculate strides
 
         static void Main(string[] args)
         {
@@ -35,7 +36,7 @@ namespace Scheduler
 
                 for (int n = 0; n < taskQ.Count; n++)
                 {
-                    Console.WriteLine("Task Number: {0}, Run Time: {1}, Arrival Time: {2}", n, tasks[n].RunTime, tasks[n].ArriveTime);
+                    Console.WriteLine("Task Number: {0}, Run Time: {1}, Arrival Time: {2}, Tickets: {3}, Stride: {4}", n, tasks[n].runTime, tasks[n].arriveTime, tasks[n].tickets, tasks[n].stride);
                 }
                 */
 
@@ -67,11 +68,8 @@ namespace Scheduler
             // The first task arrives at 0, and then every task after that arrives 5-8 units after the previous one
             for(int i = 0; i < numTasks; i++)
             {
-                taskQ.Enqueue(new Task(rando.Next(2,60), arriveAcc));           // Queue a new task with a random run time of 2-60 units and a arrival time every 5-8 seconds
+                taskQ.Enqueue(new Task(rando.Next(2,60), arriveAcc, rando.Next(1,4) * 50, SYSTEM_STRIDE));           // Queue a new task with a random run time of 2-60 units and a arrival time every 5-8 seconds
                 arriveAcc = arriveAcc + rando.Next(5, 8);                       // Tasks arrive every 5-8 units of time after previous task
-
-                // This will be where the Stride-specific values are set
-
             }
 
             return taskQ;
@@ -84,16 +82,16 @@ namespace Scheduler
         {
             Queue<Task> taskQ = new Queue<Task>();
 
-            taskQ.Enqueue(new Task(2, 0));
-            taskQ.Enqueue(new Task(18, 6));
-            taskQ.Enqueue(new Task(2, 11));
-            taskQ.Enqueue(new Task(30, 18));
-            taskQ.Enqueue(new Task(18, 24));
-            taskQ.Enqueue(new Task(41, 30));
-            taskQ.Enqueue(new Task(36, 36));
-            taskQ.Enqueue(new Task(24, 42));
-            taskQ.Enqueue(new Task(43, 48));
-            taskQ.Enqueue(new Task(37, 54));
+            taskQ.Enqueue(new Task(2, 0,0,0));
+            taskQ.Enqueue(new Task(18, 6,0,0));
+            taskQ.Enqueue(new Task(2, 11,0,0));
+            taskQ.Enqueue(new Task(30, 18,0,0));
+            taskQ.Enqueue(new Task(18, 24,0,0));
+            taskQ.Enqueue(new Task(41, 30,0,0));
+            taskQ.Enqueue(new Task(36, 36,0,0));
+            taskQ.Enqueue(new Task(24, 42,0,0));
+            taskQ.Enqueue(new Task(43, 48,0,0));
+            taskQ.Enqueue(new Task(37, 54,0,0));
 
             return taskQ;
         }

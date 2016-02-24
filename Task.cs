@@ -21,7 +21,7 @@ namespace Scheduler
         public int passCount;
 
         // Set initial values for run time and arrival time
-        public Task (int runTime, int arriveTime)
+        public Task (int runTime, int arriveTime, int tickets, int systemStride)
         {
             this.runTime = runTime;
             this.arriveTime = arriveTime;
@@ -32,8 +32,8 @@ namespace Scheduler
             startTime = -1;
             endTime = -1;
         
-            tickets = 0;        
-            stride = 0;         
+            this.tickets = tickets;       
+            stride = systemStride/tickets;         
             passCount = 0;
         }
 
