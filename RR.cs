@@ -28,46 +28,69 @@ namespace Scheduler
 
             while (completedTasks.Count < taskCount)
             {
-
+                // Check for arrivals
                 if (taskQ.Count > 0 && taskQ.Peek().arriveTime == clock)
                 {
                     waitingQ.Enqueue(taskQ.Dequeue()); // Adds the top task to the waitingQ
                 }
 
+
+                // Process or set new task
+
                 if (currentProcess.isEmpty() && waitingQ.Count > 0)
                 {
                     currentProcess = waitingQ.Dequeue();
-                    currentProcess.startTime = clock;
+
+
+                    // Set start time if it has not been set before
+                    if (!currentProcess.hasStarted())
+                    {
+                        currentProcess.startTime = clock;
+                    }
+
+
                     currentRT = currentProcess.runTime;
-                }
 
-                if(count < timeSlice)
-                { 
-                    // Check if task is done and add it to completedTasks list
-                    if (currentProcess.timeLeft == 0 && !currentProcess.isEmpty())
-                    {
-                        currentProcess.endTime = clock;         // Set end time for the job
-                        completedTasks.Add(currentProcess);     // Add it to the completed task list
-                        currentProcess = new Task();            // Resets the current process
-                        count = 0;               
-
-                    }
-                    
-                    else
-                    {
-                        // Process the current task
-                        currentProcess.timeLeft--;
-
-                    }
-                    // Increment clock and reset the loop
-                    clock++;
-                    count++;
-                }
-                if (count == timeSlice)
-                {
-                    waitingQ.Enqueue(currentProcess);
                     count = 0;
                 }
+
+                // Processing time is up for the current process
+                else if(count == timeSlice && waitingQ.Count > 0)
+                {
+                    // Check if task is done and add it to completedTasks list
+                    waitingQ.Enqueue(currentProcess);
+                    currentProcess = waitingQ.Dequeue();
+
+                    // Set start time if it has not been set before
+                    if (!currentProcess.hasStarted())
+                    {
+                        currentProcess.startTime = clock;
+                    }
+
+                    count = 0;
+                }
+
+                // Process the current task
+                else if (currentProcess.startTime != clock)
+                {
+                    currentProcess.timeLeft--;
+
+                }
+
+
+                // Complete Process
+                if (currentProcess.isDone())
+                {
+                    currentProcess.endTime = clock;         // Set end time for the job
+                    completedTasks.Add(currentProcess);     // Add it to the completed task list
+                    currentProcess = new Task();            // Resets the current process
+                    count = 0;
+
+                }
+
+                // Increment clock and reset the loop
+                clock++;
+                count++;
             }
             
         

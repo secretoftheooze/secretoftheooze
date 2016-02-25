@@ -11,7 +11,7 @@ namespace Scheduler
 {
     class Program
     {
-        const int NUM_TESTS = 20;            // The number of tests being done
+        const int NUM_TESTS = 1;            // The number of tests being done
         const int NUM_TASKS = 10;            // The number of jobs being generated for processing 
         const int SYSTEM_STRIDE = 1000;      // System value used to calculate strides
         const int TS1 = 5;                   // Time slice 1 - used by Stride and Round Robin
@@ -20,17 +20,18 @@ namespace Scheduler
         {
             // Initialize task queue and algorithms
             Queue<Task> taskQ = new Queue<Task>();
-            SJF sjf = new SJF();
-            PE_SJF pesjf = new PE_SJF();
+          //  SJF sjf = new SJF();
+           // PE_SJF pesjf = new PE_SJF();
             FIFO fifo = new FIFO();
             Stride stride = new Stride();
+            RR rr = new RR();
 
             // Proceed to loop through all of the tests
             for (int i = 1; i <= NUM_TESTS; i++)
             {
                 // Generate the tasks
-                taskQ = generateTasks(10, i);
-                //taskQ = testTasks();// TESTING
+                //taskQ = generateTasks(10, i);
+                taskQ = testTasks();// TESTING
                
                 /*
                 // Testing the queue generator (No issues, being used to compare to algorithm output now)
@@ -43,18 +44,20 @@ namespace Scheduler
                 */
 
                 // Perform the tests with each of the algorithms
-                sjf.ProcessTasks(i, new Queue<Task>(taskQ));
-                pesjf.ProcessTasks(i, new Queue<Task>(taskQ));
+               // sjf.ProcessTasks(i, new Queue<Task>(taskQ));
+               // pesjf.ProcessTasks(i, new Queue<Task>(taskQ));
                 fifo.ProcessTasks(i, new Queue<Task>(taskQ));
                 stride.ProcessTasks(i, new Queue<Task>(taskQ), TS1);
+                rr.ProcessTasks(i, new Queue<Task>(taskQ), TS1);
                 // Other algorithms
             }
 
             // Output results for each algorithm
-            sjf.OutputResults();
-            pesjf.OutputResults();
+            //sjf.OutputResults();
+            //pesjf.OutputResults();
             fifo.OutputResults();
             stride.OutputResults();
+            rr.OutputResults();
 
             Console.ReadLine();
 
@@ -86,16 +89,16 @@ namespace Scheduler
         {
             Queue<Task> taskQ = new Queue<Task>();
 
-            taskQ.Enqueue(new Task(2, 0,0,0));
-            taskQ.Enqueue(new Task(18, 6,0,0));
-            taskQ.Enqueue(new Task(2, 11,0,0));
-            taskQ.Enqueue(new Task(30, 18,0,0));
-            taskQ.Enqueue(new Task(18, 24,0,0));
-            taskQ.Enqueue(new Task(41, 30,0,0));
-            taskQ.Enqueue(new Task(36, 36,0,0));
-            taskQ.Enqueue(new Task(24, 42,0,0));
-            taskQ.Enqueue(new Task(43, 48,0,0));
-            taskQ.Enqueue(new Task(37, 54,0,0));
+            taskQ.Enqueue(new Task(2, 0,50,SYSTEM_STRIDE));
+            taskQ.Enqueue(new Task(18, 6,100, SYSTEM_STRIDE));
+            taskQ.Enqueue(new Task(2, 11,150, SYSTEM_STRIDE));
+            taskQ.Enqueue(new Task(30, 18,100, SYSTEM_STRIDE));
+            taskQ.Enqueue(new Task(18, 24,100, SYSTEM_STRIDE));
+            taskQ.Enqueue(new Task(41, 30,150, SYSTEM_STRIDE));
+            taskQ.Enqueue(new Task(36, 36,50, SYSTEM_STRIDE));
+            taskQ.Enqueue(new Task(24, 42,100, SYSTEM_STRIDE));
+            taskQ.Enqueue(new Task(43, 48,150, SYSTEM_STRIDE));
+            taskQ.Enqueue(new Task(37, 54,150, SYSTEM_STRIDE));
 
             return taskQ;
         }
