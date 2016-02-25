@@ -1,6 +1,6 @@
-﻿// COIS 3320 A1: SchedulingAlgorithms
+﻿// COIS 3320 A1: SchedulingAlgorithm
 // Colin A. Marshall(0533528) and Brandon Root(0564499)
-// Contains the scheduling algorithms used for testing
+// Contains the base scheduling algorithm used for testing
 
 using System;
 using System.Collections.Generic;
@@ -24,9 +24,6 @@ namespace Scheduler
         protected Task currentProcess;                            // The task being processed
         protected List<Task> completedTasks = new List<Task>();   // List of completed tasks
 
-        // Standard constructor
-        // public SchedulingAlgorithm(int testNum) { }
-
         // Initialize the test
         // Creates the file name for the test based on the number and algorithm name provided
         protected void Init(int testNum, string algName)
@@ -44,21 +41,8 @@ namespace Scheduler
         // The main algorithm - just a skeleton for the base class
         // testNum = the number of tests
         // taskQ = the queue of tasks, treated as tasks that do not exist yet until they "arrive" at a set time
-        public void ProcessTasks(int testNum, Queue<Task> taskQ)
-        {
-            // Initialize the test settings and then run the test
-            Init(testNum, algName);
-        }
+        public void ProcessTasks(int testNum, Queue<Task> taskQ) {}
        
-        /* ProcessTasks - General Mockup
-            while (completedTasks < numTasks)
-            - Check for arrival and set current task OR process current task
-                - This may also be where a context switch is performed
-            - Check if current task is done
-
-            Output(completedTasks)
-
-        */
 
         // Output
         // Processes the output of the ProcessTasks algorithm and outputs it into a CSV file
@@ -120,6 +104,7 @@ namespace Scheduler
         }
 
         // Output Final Results
+        // To be implemented in other classes as well due to algName
         public void OutputResults()
         {
             OutputResults(algName);

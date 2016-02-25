@@ -1,8 +1,10 @@
-﻿using System;
+﻿// COIS 3320 A1: Round Robin Algorithm
+// Colin A. Marshall(0533528) and Brandon Root(0564499)
+// Stride: Allots every value tickets based on its priority and then creates a stride value based off of that and the system stride value. From there, its pass count is incremented by the stride value as it is being processed giving higher priority tasks more processing time.
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Scheduler
 {
@@ -11,7 +13,7 @@ namespace Scheduler
         new string algName = "STRIDE";                      // Stride
         List<Task> waitingList = new List<Task>();
 
-        // Hide original method, and proceed to process the tasks as per the algorithm
+        // Process the tasks
         public void ProcessTasks(int testNum, Queue<Task> taskQ, int timeSlice)
         {
             Init(testNum, algName);
@@ -28,8 +30,6 @@ namespace Scheduler
                 // Check for new arrivals, and if the arrival queue is empty
                 if (taskQ.Count > 0 && taskQ.Peek().arriveTime == clock)
                 {
-                    //waitingList.Add(taskQ.Dequeue());   // Adds the top task to the waitingList
-
                     // Context Switch
                     // Determine if the new arrival has a smaller PASS count and if it is time for a new context switch
                     if (tickCount < timeSlice && currentProcess.passCount <= taskQ.Peek().passCount)

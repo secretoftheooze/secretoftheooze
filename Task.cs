@@ -16,11 +16,12 @@ namespace Scheduler
         public int endTime;            // The time that the task finished processing. Initially set to -1.
 
         // Stride specific values
-        public int tickets;        // How many tickets are alloted to the task for Stride scheduling
-        public int stride;         // Stride value, determined by stride algorithm
-        public int passCount;
+        public int tickets;            // How many tickets are alloted to the task for Stride scheduling
+        public int stride;             // Stride value, determined by number of tickets
+        public int passCount;          // Initially set to 0 but manipulated by the Stride algorithm, incrementing by "strides"
 
-        // Set initial values for run time and arrival time
+        // Constructor
+        // Set initial values for run time, arrival time, tickets, and the stride
         public Task (int runTime, int arriveTime, int tickets, int systemStride)
         {
             this.runTime = runTime;
@@ -32,6 +33,7 @@ namespace Scheduler
             startTime = -1;
             endTime = -1;
         
+            // Set tickets and stride
             this.tickets = tickets;       
             stride = systemStride/tickets;         
             passCount = 0;
