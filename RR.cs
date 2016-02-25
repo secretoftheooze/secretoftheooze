@@ -50,6 +50,7 @@ namespace Scheduler
                         completedTasks.Add(currentProcess);     // Add it to the completed task list
                         currentProcess = new Task();            // Resets the current process
                         count = 0;               
+
                     }
                     
                     else
@@ -64,7 +65,7 @@ namespace Scheduler
                 }
                 if (count == timeSlice)
                 {
-                    taskQ.Enqueue(currentProcess);
+                    waitingQ.Enqueue(currentProcess);
                     count = 0;
                 }
             }
