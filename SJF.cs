@@ -1,6 +1,7 @@
-﻿// Shortest Job First Algorithm
-// Will also host Pre-Emptive SJF in the future
+﻿// COIS 3320 A1: Shortest Job First + Pre-Emptive Shortest Job First Algorithms
+// Colin A. Marshall(0533528) and Brandon Root(0564499)
 // SJF - Prioritizes jobs with the shortest run time, and processes them until completion
+// PE_SJF - Prioritizes jobs with the shortest run time, and interupts the current process if a new one arrives and has a shorter run time
 
 using System;
 using System.Collections.Generic;
@@ -66,7 +67,7 @@ namespace Scheduler
                 
 
                 // Check if task is done and add it to completedTasks list
-                if (currentProcess.timeLeft == 0 && !currentProcess.isEmpty())
+                if (currentProcess.isDone())
                 {
                     currentProcess.endTime = clock;         // Set end time for the job
                     completedTasks.Add(currentProcess);     // Add it to the completed task list
@@ -113,6 +114,9 @@ namespace Scheduler
 
     }
 
+    // Pre-Emptive SJF
+    // Uses the same waitingList structure as SJF, and really only differentiates in its interrupt 
+
     class PE_SJF : SJF
     {
         new string algName = "PE-SJF";                      // Pre-Emptive SJF
@@ -143,8 +147,7 @@ namespace Scheduler
             {
                 // Check for new arrivals, and if the arrival queue is empty
                 if (taskQ.Count > 0 && taskQ.Peek().arriveTime == clock)
-                {
-                    //waitingList.Add(taskQ.Dequeue());   // Adds the top task to the waitingList
+                { 
 
                     // Context Switch
                     // Determine if the new arrival has a short enough run time that it justifies switching jobs
@@ -171,7 +174,7 @@ namespace Scheduler
                     currentProcess = waitingList[sjIndex];
 
                     // Set start time if it has not been set before
-                    if (currentProcess.startTime == -1)
+                    if (!currentProcess.hasStarted())
                     {
                         currentProcess.startTime = clock;
                     }
@@ -188,7 +191,7 @@ namespace Scheduler
 
 
                 // Check if task is done and add it to completedTasks list
-                if (currentProcess.timeLeft == 0 && !currentProcess.isEmpty())
+                if (currentProcess.isDone())
                 {
                     currentProcess.endTime = clock;         // Set end time for the job
                     completedTasks.Add(currentProcess);     // Add it to the completed task list

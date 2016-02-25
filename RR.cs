@@ -1,8 +1,10 @@
-﻿using System;
+﻿// COIS 3320 A1: Round Robin Algorithm
+// Colin A. Marshall(0533528) and Brandon Root(0564499)
+// RR: Each process is given a set amount of time to be processed, and is re-added into the queue (until it is finished)
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Scheduler
 {
@@ -22,7 +24,7 @@ namespace Scheduler
 
             // Count the number of tasks that need to be completed
             int taskCount = taskQ.Count;
-            int count = 0; // counter for timeslice loop
+            int tickCount = 0; 
 
             while (completedTasks.Count < taskCount)
             {
@@ -34,7 +36,7 @@ namespace Scheduler
 
 
                 // Process or set new task
-
+                // Set process after completion of last process
                 if (currentProcess.isEmpty() && waitingQ.Count > 0)
                 {
                     currentProcess = waitingQ.Dequeue();
@@ -46,11 +48,11 @@ namespace Scheduler
                         currentProcess.startTime = clock;
                     }
 
-                    count = 0;
+                    tickCount = 0;
                 }
 
                 // Processing time is up for the current process
-                else if(count == timeSlice && waitingQ.Count > 0)
+                else if(tickCount == timeSlice && waitingQ.Count > 0)
                 {
                     // Check if task is done and add it to completedTasks list
                     waitingQ.Enqueue(currentProcess);
@@ -62,14 +64,14 @@ namespace Scheduler
                         currentProcess.startTime = clock;
                     }
 
-                    count = 0;
+                    tickCount = 0;
                 }
 
                 // Process the current task
                 else if (currentProcess.startTime != clock)
                 {
                     currentProcess.timeLeft--;
-                    count++;                                // Increment counter
+                    tickCount++;                                // Increment counter
                     
                 }
 
@@ -80,7 +82,7 @@ namespace Scheduler
                     currentProcess.endTime = clock;         // Set end time for the job
                     completedTasks.Add(currentProcess);     // Add it to the completed task list
                     currentProcess = new Task();            // Resets the current process
-                    count = 0;
+                    tickCount = 0;
 
                 }
 
