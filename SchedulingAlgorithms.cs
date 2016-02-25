@@ -105,8 +105,8 @@ namespace Scheduler
                     averageWait = averageWait / taskCount;                  // taskCount is used since it equals NUM_TASKS as opposed to the largest index of completedTasks
                     averageTurnaround = averageTurnaround / taskCount;
 
-                    sw.WriteLine("Average wait time: {0}", averageWait); // need to format for 3 decimal places. I forget how and I'm too tired now. - Colin
-                    sw.WriteLine("Average turnaround time: {0}", averageTurnaround); // need to format for 3 decimal places. I forget how and I'm too tired now. - Colin
+                    sw.WriteLine("Average wait time:, {0}", averageWait); // need to format for 3 decimal places. I forget how and I'm too tired now. - Colin
+                    sw.WriteLine("Average turnaround time:, {0}", averageTurnaround); // need to format for 3 decimal places. I forget how and I'm too tired now. - Colin
 
                     // For testing purposes
                     Console.WriteLine("Test file successfully generated for {0}", testPath);
