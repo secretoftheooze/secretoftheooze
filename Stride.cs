@@ -65,13 +65,16 @@ namespace Scheduler
 
                     // Remove the current process from the waiting list
                     waitingList.Remove(waitingList[passIndex]);
+
+                    // Reset tickCount
+                    tickCount = 0;
                 }
 
                 // Switch processes if it its time is up
                 else if (tickCount == timeSlice && waitingList.Count > 0)
                 {
                     // Increment the pass count
-                    //currentProcess.passCount = currentProcess.passCount + currentProcess.stride;    
+                    currentProcess.passCount = currentProcess.passCount + currentProcess.stride;    
 
                     // Re-Add the CurrentProcess to the waitingList
                     waitingList.Add(currentProcess);
@@ -84,6 +87,9 @@ namespace Scheduler
                    
                     // Remove the current process from the waiting list
                     waitingList.Remove(waitingList[passIndex]);
+
+                    // Reset tickCount
+                    tickCount = 0;
                 }
 
                 // Process the current task, unless there was a recent context switch on this tick
@@ -91,6 +97,7 @@ namespace Scheduler
                 {
                     currentProcess.timeLeft--;                                                      // Decrement the time left
                     currentProcess.passCount = currentProcess.passCount + currentProcess.stride;    // Increment the pass count
+                    tickCount++;                                                                    // Increment process counter
                 }
 
 
@@ -105,7 +112,6 @@ namespace Scheduler
 
                 // Increment clock
                 clock++;
-                tickCount++;
             }
 
             // After processing, output the results

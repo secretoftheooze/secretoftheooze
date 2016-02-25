@@ -42,6 +42,8 @@ namespace Scheduler
         }
 
         // The main algorithm - just a skeleton for the base class
+        // testNum = the number of tests
+        // taskQ = the queue of tasks, treated as tasks that do not exist yet until they "arrive" at a set time
         public void ProcessTasks(int testNum, Queue<Task> taskQ)
         {
             // Initialize the test settings and then run the test

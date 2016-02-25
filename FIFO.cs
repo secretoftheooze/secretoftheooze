@@ -22,7 +22,6 @@ namespace Scheduler
 
             // Count the number of tasks that need to be completed
             int taskCount = taskQ.Count;
-            int currentRT;  // Keeps track of current tasks runtime
 
 
             while (completedTasks.Count < taskCount)
@@ -32,29 +31,30 @@ namespace Scheduler
                     waitingQ.Enqueue(taskQ.Dequeue()); // Adds the top task to the waitingQ
                 }
 
+                // Check if there is another process to queue if there is no current process
                 if (currentProcess.isEmpty() && waitingQ.Count > 0)
                 {
                     currentProcess = waitingQ.Dequeue();
                     currentProcess.startTime = clock;
-                    currentRT = currentProcess.runTime;
 
                 }
-                    // Check if task is done and add it to completedTasks list
-                    if (currentProcess.timeLeft == 0 && !currentProcess.isEmpty())
-                    {
-                        currentProcess.endTime = clock;         // Set end time for the job
-                        completedTasks.Add(currentProcess);     // Add it to the completed task list
-                        currentProcess = new Task();            // Resets the current process
-                    }
-                    else
-                    {
-                        // Process the current task
-                        currentProcess.timeLeft--;
-                    }
-
-                    // Increment clock and reset the loop
-                    clock++;
+                
+                // Check if task is done and add it to completedTasks list
+                if (currentProcess.timeLeft == 0 && !currentProcess.isEmpty())
+                {
+                    currentProcess.endTime = clock;         // Set end time for the job
+                    completedTasks.Add(currentProcess);     // Add it to the completed task list
+                    currentProcess = new Task();            // Resets the current process
                 }
+                else
+                {
+                    // Process the current task
+                    currentProcess.timeLeft--;
+                }
+
+                // Increment clock and reset the loop
+                clock++;
+            }
             
 
                 // After processing, output the results

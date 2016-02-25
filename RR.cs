@@ -10,20 +10,18 @@ namespace Scheduler
     {
         new string algName = "RR";
 
-        public void RRInit(int testNum)
+        public void RRInit(int testNum, int timeSlice)
         {
-            Init(testNum, algName);
-            Console.WriteLine(testPath);
+            Init(testNum, String.Format("{0}_{1}", algName, timeSlice));         // Set the testpath to be the algName + the time slice
         }
 
 
         public void ProcessTasks(int testNum, Queue<Task> taskQ, int timeSlice)
         {
-            RRInit(testNum);
+            RRInit(testNum, timeSlice);
 
             // Count the number of tasks that need to be completed
             int taskCount = taskQ.Count;
-            int currentRT;  // Keeps track of current tasks runtime
             int count = 0; // counter for timeslice loop
 
             while (completedTasks.Count < taskCount)
@@ -48,9 +46,6 @@ namespace Scheduler
                         currentProcess.startTime = clock;
                     }
 
-
-                    currentRT = currentProcess.runTime;
-
                     count = 0;
                 }
 
@@ -74,7 +69,8 @@ namespace Scheduler
                 else if (currentProcess.startTime != clock)
                 {
                     currentProcess.timeLeft--;
-
+                    count++;                                // Increment counter
+                    
                 }
 
 
@@ -90,7 +86,7 @@ namespace Scheduler
 
                 // Increment clock and reset the loop
                 clock++;
-                count++;
+
             }
             
         
@@ -98,10 +94,10 @@ namespace Scheduler
             OutputTest(completedTasks);
         }
 
-
-        public new void OutputResults()
+        // Output the results of the tests with the set time slice
+        public void OutputResults(int timeSlice)
         {
-            OutputResults(algName);
+            OutputResults(String.Format("{0}_{1}",algName,timeSlice));
         }
 
     }

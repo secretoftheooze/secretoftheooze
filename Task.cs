@@ -41,7 +41,7 @@ namespace Scheduler
         // Checks if the task has been started or not
         public bool hasStarted()
         {
-            if (startTime > -1)
+            if (startTime > -1 && !isEmpty())           // Checks if it has a set start time and that the start time isn't above -1 because it is empty
                 return true;
             else
                 return false;
